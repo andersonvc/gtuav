@@ -1,0 +1,35 @@
+#!/home/ryan/miniconda3/envs/omlab/bin/python
+
+import os
+from mmdet.apis import train_detector, inference_detector, show_result_pyplot, set_random_seed
+from mmdet.datasets import build_dataset
+from mmdet.models import build_detector
+
+import mmcv
+from mmcv import Config
+import torch
+
+
+cfg = Config.fromfile('./base_CEL1Loss_configs/config.py')
+cfg.work_dir = './results/base_CEL1Loss'
+
+# Add Seed Parameters
+cfg.seed = 0
+set_random_seed(0, deterministic=False)
+
+# Assign Cuda Device -Only 1 is set for my config
+cfg.gpu_ids = range(1)
+
+
+print(cfg.pretty_text)
+
+
+datasets = [build_dataset(cfg.data.train)]
+model = build_detector(cfg.model,train_cfg=cfg.train_cfg,test_cfg=cfg.test_cfg)
+train_detector(model, datasets, cfg, distributed=False, validate=True)
+
+print('complete')
+
+
+
+

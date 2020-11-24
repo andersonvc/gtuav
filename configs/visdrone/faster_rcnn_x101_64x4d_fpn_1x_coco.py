@@ -13,19 +13,21 @@ model = dict(
         style='pytorch'))
 
 dataset_type = 'COCODataset'
-classes = ('pedestrian','people','bicycle','car','van','truck','tricycle','awning-tricycle','bus','motor')
+
+classes = ('__background__', 'pedestrian', 'people', 'bicycle', 'car', 'van', 'truck', 'tricycle', 'awning-tricycle', 'bus', 'motor', 'others')
+
 data = dict(
     train=dict(
-        img_prefix='configs/visdrone/train/',
+        img_prefix='data/visdrone/train/',
         classes=classes,
-        ann_file='configs/visdrone/train/annotation_coco.json'),
+        ann_file='data/visdrone/train/coco.json'),
     val=dict(
-        img_prefix='configs/visdrone/val/',
+        img_prefix='data/visdrone/val/',
         classes=classes,
-        ann_file='configs/visdrone/val/annotation_coco.json'),
+        ann_file='data/visdrone/val/coco.json'),
     test=dict(
-        img_prefix='configs/visdrone/val/',
+        img_prefix='data/visdrone/test/',
         classes=classes,
-        ann_file='configs/visdrone/val/annotation_coco.json'))
+        ann_file='data/visdrone/test/coco.json'))
 
 
