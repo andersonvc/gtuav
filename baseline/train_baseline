@@ -16,9 +16,9 @@ cfg = Config.fromfile('./baseline_model_config.py')
 # Configure Dataset
 
 train_imagedir = os.path.abspath('..')+'/data/visdrone/train/images/'
-train_labelpath = os.path.abspath('..')+'/data/visdrone/train/train.json'
+train_labelpath = os.path.abspath('..')+'/data/visdrone/train/baseline_train.json'
 val_imagedir = os.path.abspath('..')+'/data/visdrone/val/images/'
-val_labelpath = os.path.abspath('..')+'/data/visdrone/val/val.json'
+val_labelpath = os.path.abspath('..')+'/data/visdrone/val/baseline_val.json'
 
 img_norm_cfg = dict(mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 
