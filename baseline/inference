@@ -3,6 +3,7 @@
 from argparse import ArgumentParser
 from mmdet.apis import inference_detector, init_detector, show_result_pyplot
 from mmcv import Config
+import random
 import os
 import cv2
 
@@ -66,7 +67,10 @@ model.CLASSES = ('pedestrian', 'people', 'bicycle', 'car', 'van', 'truck', 'tric
 
 class_label = [('pedestrian',(255,0,0)),('people',(127,127,127)),('bicycle',(0,0,255)),('car',(0,255,0)),('van',(0,255,255)),('truck',(0,0,255)),('tricycle',(238,130,238)),('awning',(0,0,0)),('bus',(130,0,75)),('motor',(255,255,255))]
 
-images= [val_imagedir + v for v in os.listdir(val_imagedir)[30:35]]
+
+start_idx = random.randint(0,3000)
+
+images= [val_imagedir + v for v in os.listdir(val_imagedir)[start_idx:start_idx+5]]
 for i,img in enumerate(images):
     results = inference_detector(model, img)
     alpha=0.3
