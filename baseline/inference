@@ -1,0 +1,102 @@
+#!/home/ryan/miniconda3/envs/omlab/bin/python
+
+from argparse import ArgumentParser
+from mmdet.apis import inference_detector, init_detector, show_result_pyplot
+from mmcv import Config
+import random
+import os
+import cv2
+
+model_name = 'faster_rcnn_r50_fpn'
+cfg = Config.fromfile('./baseline_model_config.py')
+
+checkpoint = f'./checkpoints/{model_name}/latest.pth'
+device = 'cuda:0'
+score_thresh = 0.7
+
+
+val_imagedir = os.path.abspath('..')+'/data/visdrone/val/images/'
+val_labelpath = os.path.abspath('..')+'/data/visdrone/val/baseline_val.json'
+cfg.dataset_type = 'CocoDataset'
+cfg.classes = ('pedestrian', 'people', 'bicycle', 'car', 'van', 'truck', 'tricycle', 'awning-tricycle', 'bus', 'motor')
+img_norm_cfg = dict(mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(type='Resize', img_scale=[(1000, 600)], keep_ratio=True),
+    dict(type='RandomFlip', flip_ratio=0.5),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size_divisor=32),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels']),
+]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=[(1000, 600)],
+        flip=False,
+        transforms=[
+            dict(type='Resize', keep_ratio=True),
+            dict(type='RandomFlip'),
+            dict(type='Normalize', **img_norm_cfg),
+            dict(type='Pad', size_divisor=32),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img']),
+
+        ])
+]
+
+
+cfg.data = dict(
+    samples_per_gpu=2,
+    workers_per_gpu=2,
+    test=dict(
+        type=cfg.dataset_type,
+        ann_file=val_labelpath,
+        img_prefix=val_imagedir,
+        pipeline=test_pipeline,
+        classes=cfg.classes
+    )
+)
+
+
+model = init_detector(cfg, checkpoint, device='cuda:0')
+model.CLASSES = ('pedestrian', 'people', 'bicycle', 'car', 'van', 'truck', 'tricycle', 'awning-tricycle', 'bus', 'motor')
+
+class_label = [('pedestrian',(255,0,0)),('people',(127,127,127)),('bicycle',(0,0,255)),('car',(0,255,0)),('van',(0,255,255)),('truck',(0,0,255)),('tricycle',(238,130,238)),('awning',(0,0,0)),('bus',(130,0,75)),('motor',(255,255,255))]
+
+
+start_idx = random.randint(0,3000)
+
+images= [val_imagedir + v for v in os.listdir(val_imagedir)[start_idx:start_idx+5]]
+for i,img in enumerate(images):
+    results = inference_detector(model, img)
+    alpha=0.3
+    tmp_img = cv2.imread(img)
+    for j,bbox in enumerate(results):
+        tmp_overlay = tmp_img.copy()
+        for entry in bbox:
+            if entry[4]>score_thresh:
+                tmp_img = cv2.rectangle(tmp_img,(int(entry[0]),int(entry[1])),(int(entry[2]),int(entry[3])),class_label[j][1],2)
+                tmp_overlay = cv2.rectangle(tmp_overlay,(int(entry[0]),int(entry[1])),(int(entry[2]),int(entry[3])),class_label[j][1],-1)
+        cv2.addWeighted(tmp_overlay, alpha, tmp_img, 1 - alpha, 0, tmp_img)
+    
+    alpha=0.6
+    label_box = tmp_img.copy()
+    label_box = cv2.rectangle(label_box, (0, 0), (90, 105), (255,255,255), -1)
+    cv2.addWeighted(label_box,alpha,tmp_img,1-alpha,0,tmp_img)
+    
+    for j,(label,color) in enumerate(class_label):
+        y_offset = 5
+        x_offset = 15
+        tmp_img = cv2.rectangle(tmp_img,(5,5+j*10),(10,10+j*10),color,-1)
+        cv2.putText(tmp_img, label, (5+x_offset, 10+j*10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0,0,0))
+    
+
+        
+    cv2.imwrite(f'{i}.png',tmp_img)
+    #show_result_pyplot(model, img, result)
+    
+

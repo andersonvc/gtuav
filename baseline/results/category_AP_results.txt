@@ -1,0 +1,24 @@
+
+Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.192
+Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.320
+Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.202
+Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.098
+Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.321
+Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.363
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.095
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.245
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.284
+Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.165
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.460
+Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.477
+
+
++------------+-------+-----------------+-------+----------+-------+
+| category   | AP    | category        | AP    | category | AP    |
++------------+-------+-----------------+-------+----------+-------+
+| pedestrian | 0.128 | people          | 0.084 | bicycle  | 0.056 |
+| car        | 0.460 | van             | 0.298 | truck    | 0.203 |
+| tricycle   | 0.128 | awning-tricycle | 0.076 | bus      | 0.343 |
+| motor      | 0.145 | None            | None  | None     | None  |
++------------+-------+-----------------+-------+----------+-------+
+

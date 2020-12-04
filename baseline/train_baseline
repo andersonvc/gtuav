@@ -1,0 +1,162 @@
+#!/home/ryan/miniconda3/envs/omlab/bin/python
+
+import os
+from mmdet.apis import train_detector, inference_detector, show_result_pyplot, set_random_seed
+from mmdet.datasets import build_dataset
+from mmdet.models import build_detector
+
+import mmcv
+from mmcv import Config
+import torch
+
+model_name = 'faster_rcnn_r50_fpn'
+cfg = Config.fromfile('./baseline_model_config.py')
+
+
+# Configure Dataset
+
+train_imagedir = os.path.abspath('..')+'/data/visdrone/train/images/'
+train_labelpath = os.path.abspath('..')+'/data/visdrone/train/baseline_train.json'
+val_imagedir = os.path.abspath('..')+'/data/visdrone/val/images/'
+val_labelpath = os.path.abspath('..')+'/data/visdrone/val/baseline_val.json'
+
+img_norm_cfg = dict(mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(type='Resize', img_scale=[(1000, 600)], keep_ratio=True),
+    dict(type='RandomFlip', flip_ratio=0.5),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size_divisor=32),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels']),
+]
+
+
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=[(1000, 600)],
+        flip=False,
+        transforms=[
+            dict(type='Resize', keep_ratio=True),
+            dict(type='RandomFlip'),
+            dict(type='Normalize', **img_norm_cfg),
+            dict(type='Pad', size_divisor=32),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img']),
+
+        ])
+]
+
+
+
+image_preprocess_pipeline = [
+            dict(type='LoadImageFromFile'),
+            dict(type='LoadAnnotations', with_bbox=True),
+            dict(type='Resize', img_scale=[(1000, 600)], keep_ratio=True),
+            dict(type='RandomFlip', flip_ratio=0.5),
+            dict(
+                type='Normalize',
+                mean=[123.675, 116.28, 103.53],
+                std=[58.395, 57.12, 57.375],
+                to_rgb=True),
+            dict(type='Pad', size_divisor=32),
+            dict(type='DefaultFormatBundle'),
+            dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+        ]
+
+cfg.dataset_type = 'CocoDataset'
+cfg.classes = ('pedestrian', 'people', 'bicycle', 'car', 'van', 'truck', 'tricycle', 'awning-tricycle', 'bus', 'motor')
+
+
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(type='Resize', img_scale=[(1000, 600)], keep_ratio=True),
+    dict(type='RandomFlip', flip_ratio=0.5),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size_divisor=32),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels']),
+]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=[(1000, 600)],
+        flip=False,
+        transforms=[
+            dict(type='Resize', keep_ratio=True),
+            dict(type='RandomFlip'),
+            dict(type='Normalize', **img_norm_cfg),
+            dict(type='Pad', size_divisor=32),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img']),
+
+        ])
+]
+
+
+cfg.data = dict(
+    samples_per_gpu=2,
+    workers_per_gpu=2,
+    train=dict(
+        type=cfg.dataset_type,
+        ann_file=train_labelpath,
+        img_prefix=train_imagedir,
+        pipeline=train_pipeline,
+        classes=cfg.classes
+    ),
+    val=dict(
+        type=cfg.dataset_type,
+        ann_file=val_labelpath,
+        img_prefix=val_imagedir,
+        pipeline=test_pipeline,
+        classes = cfg.classes
+    ),
+    test=dict(
+        type=cfg.dataset_type,
+        ann_file=val_labelpath,
+        img_prefix=val_imagedir,
+        pipeline=test_pipeline,
+        classes=cfg.classes
+    )
+)
+
+# Configure scheduler
+cfg.optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
+cfg.optimizer_config = dict(grad_clip=None)
+cfg.lr_config = dict(
+    policy='step',
+    warmup='linear',
+    warmup_iters=500,
+    warmup_ratio=0.001,
+    step=[8, 11])
+cfg.total_epochs = 12
+cfg.seed = 0
+cfg.gpu_ids = range(1)
+
+# Configure logging
+cfg.checkpoint_config = dict(interval=1)
+cfg.log_config = dict(interval=500, hooks=[dict(type='TextLoggerHook')])
+cfg.dist_params = dict(backend='nccl')
+cfg.log_level = 'INFO'
+cfg.load_from = None
+cfg.resume_from = None
+cfg.workflow = [('train', 1)]
+cfg.work_dir = f'./checkpoints/{model_name}'
+cfg.evaluation = dict(interval=1, metric='bbox')
+
+
+print(cfg.pretty_text)
+
+
+datasets = [build_dataset(cfg.data.train)]
+model = build_detector(cfg.model,train_cfg=cfg.train_cfg,test_cfg=cfg.test_cfg)
+model.classes=cfg.classes
+train_detector(model, datasets, cfg, distributed=False, validate=True)
+
+print('complete')
