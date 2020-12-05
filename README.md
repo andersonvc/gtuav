@@ -18,7 +18,7 @@ This repository contains instructions on building and redeploying our modeling e
 
 ## Dataset
 
-The VisDrone dataset is colleted by the AISKYEYE team at the Lab of Machine Learning & DAta Mining, Tianjin University, China. The benchmark dataset consists of 288 video clips formed by 261,908 frames and 10,209 images taken from 14 different cities in china. More information can be found http://aiskyeye.com/.
+The VisDrone dataset is colleted by the AISKYEYE team at the Lab of Machine Learning & Data Mining, Tianjin University, China. The benchmark dataset consists of 288 video clips formed by 261,908 frames and 10,209 images taken from 14 different cities in china. More information can be found http://aiskyeye.com/.
 
                                                             Number of images
     ---------------------------------------------------------------------------------------------------
@@ -27,33 +27,18 @@ The VisDrone dataset is colleted by the AISKYEYE team at the Lab of Machine Lear
       Object detection in images       6,471 images            548 images             1,580 images
     ---------------------------------------------------------------------------------------------------
 
+In addition to the standard noramlized bbox annotations (i.e ``bbox_left/top/width/height``) visdrone also contains `truncation` and `occlusion` identifiers as described below.
+
         Name                                                  Description
     -------------------------------------------------------------------------------------------------------------------------------     
-     <bbox_left>	     The x coordinate of the top-left corner of the predicted bounding box
-  
-     <bbox_top>	     The y coordinate of the top-left corner of the predicted object bounding box
-  
-     <bbox_width>	     The width in pixels of the predicted object bounding box
- 
-    <bbox_height>	     The height in pixels of the predicted object bounding box
- 
-       <score>	     The score in the DETECTION file indicates the confidence of the predicted bounding box enclosing 
-                         an object instance.
-                         The score in GROUNDTRUTH file is set to 1 or 0. 1 indicates the bounding box is considered in evaluation, 
-                         while 0 indicates the bounding box will be ignored.
+
+    <object_category> The object category indicates the type of annotated object, (i.e., ignored regions(0), pedestrian(1), people(2), bicycle(3), car(4), van(5), truck(6), tricycle(7), awning-tricycle(8), bus(9), motor(10), others(11))
                           
-    <object_category>    The object category indicates the type of annotated object, (i.e., ignored regions(0), pedestrian(1), 
-                         people(2), bicycle(3), car(4), van(5), truck(6), tricycle(7), awning-tricycle(8), bus(9), motor(10), 
-                         others(11))
+    <truncation> The score in the DETECTION result file should be set to the constant -1.
+    The score in the GROUNDTRUTH file indicates the degree of object parts appears outside a frame 
+    (i.e., no truncation = 0 (truncation ratio 0%), and partial truncation = 1 (truncation ratio 1% ~ 50%)).
                           
-    <truncation>	     The score in the DETECTION result file should be set to the constant -1.
-                         The score in the GROUNDTRUTH file indicates the degree of object parts appears outside a frame 
-                         (i.e., no truncation = 0 (truncation ratio 0%), and partial truncation = 1 (truncation ratio 1% ~ 50%)).
-                          
-    <occlusion>	     The score in the DETECTION file should be set to the constant -1.
-                         The score in the GROUNDTRUTH file indicates the fraction of objects being occluded (i.e., no occlusion = 0 
-                         (occlusion ratio 0%), partial occlusion = 1 (occlusion ratio 1% ~ 50%), and heavy occlusion = 2 
-                         (occlusion ratio 50% ~ 100%)).
+    <occlusion>	The score in the DETECTION file should be set to the constant -1. The score in the GROUNDTRUTH file indicates the fraction of objects being occluded (i.e., no occlusion = 0 (occlusion ratio 0%), partial occlusion = 1 (occlusion ratio 1% ~ 50%), and heavy occlusion = 2 (occlusion ratio 50% ~ 100%)).
    ------------------------------------------------------------------------------------------------------------------------------
    
 
