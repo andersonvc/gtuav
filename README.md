@@ -1,4 +1,6 @@
-# gtuav
+# Georgia Tech UAV
+
+| [Deep Learning Fall 2020 at Georgia Tech (Prof. Zsolt Kira)](https://github.com/pytorch/workshops/tree/master/CS7643)
 
 
 **Report**: We have released our technical report @ [link](https://deadlink.com).
@@ -47,11 +49,15 @@ pip install -v -e .  # or "python setup.py develop"
 
 #### Training
 
+TODO: Instructions here.
+
 #### Demo
+
+TODO: Instructions here.
 
 ## Results
 
-### Faster R-CNN
+### GT UAV Model Zoo
 
 | Model  |    Backbone     |  Style  | Lr schd | Mem (GB) | Inf time (fps) | box AP | Config | Download |
 | :----: | :-------------: | :-----: | :-----: | :------: | :------------: | :----: | :------: | :--------: |
