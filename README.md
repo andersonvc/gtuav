@@ -113,6 +113,32 @@ The training speed is measure with s/iter. The lower, the better.
 | Mask R-CNN   | 3.9         |
 | Retinanet    | 3.4         |
 
+## Extra: Generating stylized examples.
+
+1) Download stylized images
+
+Use kaggle to download painters-by-numbers dataset directly at https://www.kaggle.com/c/painter-by-numbers/data. or if you have `kaggle` api installed you can use:
+
+`kaggle datasets download mfekadu/painters-train-part-1/2/3`
+
+2) Download autoencoder networks and generate data. 
+
+```
+git clone https://github.com/bethgelab/stylize-datasets
+cd stylized-datasets
+```
+
+then run the following command to generate your augmented dataset.
+
+```
+ python3 stylize.py 
+      --content-dir '/home/username/stylize-datasets/images/' 
+      --style-dir '/home/username/stylize-datasets/train/' 
+      --num-styles 10 
+      --alpha 0.5 
+      --content_size 0 
+      --style_size 256
+ ```
 
 ## License
 
@@ -127,10 +153,10 @@ v1.0.0 was released on December 5th, 2020.
 You can use the following to cite this work.
 
 ```
-@article{mmdetection,
+@article{gtuav,
   title   = {{View from Above}: Assessing SOTA Techniques to Detect/Classify Objects in Real-Time Drone Feeds},
   author  = {Jayson Francis, Ryan Anderson, Mario Wijaya, Jing-Jing Li},
-  journal= {arXiv preprint arXiv:XXXX},
+  journal= {},
   year={2020}
 }
 ```
