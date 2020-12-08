@@ -18,7 +18,7 @@ cfg.seed = 0
 set_random_seed(0, deterministic=False)
 
 # Assign Cuda Device -Only 1 is set for my config
-cfg.gpu_ids = range(2,3)
+cfg.gpu_ids = range(1)
 
 
 print(cfg.pretty_text)

@@ -3,7 +3,7 @@
 | [Deep Learning Fall 2020 at Georgia Tech (Prof. Zsolt Kira)](https://github.com/pytorch/workshops/tree/master/CS7643)
 
 
-**Report**: We have released our technical report @ [link](https://deadlink.com).
+**Report**: We have released our technical report @ [link](report/report.pdf).
 
 ## Introduction
 
@@ -11,10 +11,9 @@ Automatic understanding of visual data collected from overhead platforms such as
 
 In conjunction with ECCV & ICCV participants, the VisDrone team has constructed experimental dataset of images use in challenges for (1) image object detection, (2) video object detection, (3) single object tracking, and (4) multi-object tracking. 
 
-This repository contains instructions on building and redeploying our modeling efforts.
+This repository contains instructions on how to evaluate state-of-the-art modeling architectures with mmdetection framework and aerial imagery.
 
-![demo image](resources/demo.jpg)
-
+[![watch demo](https://img.youtube.com/vi/83NDDz0zbiY/hqdefault.jpg)](https://www.youtube.com/watch?v=83NDDz0zbiY)
 
 ## Dataset
 
@@ -76,11 +75,19 @@ pip install -v -e .  # or "python setup.py develop"
 
 #### Training
 
-TODO: Instructions here.
+Refer to `baseline` directory for our general pipeline.
+
+`python baseline/train_baseline`
+
+You can also leverage mmdetection cli
+
+`python mmdetection/tools/train.py <configfile.py>`
 
 #### Demo
+ 
+To run inference on a video, you can use the following `video_demo.py` script as follows:
 
-TODO: Instructions here.
+`python scripts/video_demo.py --video <videofile.mp4> --config <configfile.py> --checkpoint <latest.pth>` 
 
 ## Results
 
@@ -88,12 +95,12 @@ TODO: Instructions here.
 
 | Model  |    Backbone     |  Style  | Lr schd | Mem (GB) | Inf time (fps) | box AP | Config | Download |
 | :----: | :-------------: | :-----: | :-----: | :------: | :------------: | :----: | :------: | :--------: |
-| Faster-RCNN | S-50-FPN   | pytorch	|   1x	  |   4.8  |   -	          | 42.0 |[config](link) | [model](link) &#124; [log](link) |
-| Faster-RCNN | S-101-FPN  | pytorch	|   1x	  |   7.1  |   -	          | 44.5 |[config](link) | [model](link) &#124; [log](link) |
-| Center NET  | S-50-FPN   | pytorch	|   1x	  |   4.8  |   -	          | 42.0 |[config](link) | [model](link) &#124; [log](link) |
-| Fast RCNN   | S-50-FPN   | pytorch	|   1x	  |   7.1  |   -	          | 44.5 |[config](link) | [model](link) &#124; [log](link) |
-| Fast RCNN   | S-50-FPN   | pytorch	|   1x	  |   4.8  |   -	          | 42.0 |[config](link) | [model](link) &#124; [log](link) |
-| Fast RCNN   | S-50-FPN   | pytorch	|   1x	  |   7.1  |   -	          | 44.5 |[config](link) | [model](link) &#124; [log](link) |
+| Faster-RCNN (CE)   | S-50-FPN   | pytorch	|   1x	  |   4.8    |   23	          | 24.3 |[config](configs/visdrone/) | [model](link) &#124; [log](link) |
+| Faster-RCNN (FOCAL)  | S-50-FPN   | pytorch	|   1x	  |   4.8  |   23	          | 22.5 |[config](configs/visdrone/faster_rcnn_r50_fpn_focal_l1loss_1x_coco.py) | [model](https://drive.google.com/drive/folders/1lmsgS1Z152tMRIHfEDG1cgkLxWKCa733?usp=sharing) &#124; [log](logs/faster_rcnn_r50_fpn_focal_l1loss_1x_coco/) |
+
+| Faster-RCNN   | S-101-FPN  | pytorch	|   1x	  |   8.1  |   18	          | 17.9 |[config](configs/visdrone/faster_rcnn_x101_64x4d_fpn_1x_coco.py) | [model](link) &#124; [log](logs/faster_rcnn_x101_64x4d_fpn_1x_coco/) |
+| Cascade RCNN  | S-50-FPN   | pytorch	|   1x	  |   4.8  |   13	          | 32.9 |[config](configs/visdrone/cascade_rcnn_r50_fpn_1x_coco.py) | [model](https://drive.google.com/open?id=1aacfxzj1FoRKBM8Fa-FFw4WCK64SfFp-) &#124; [log](logs/cascade_rcnn_r50_fpn_1x_coco/) |
+| DetectoRS     | S-50-FPN   | pytorch	|   1x	  |   4.1  |   11	          | 20.6 |[config](link) | [model](https://drive.google.com/open?id=1pC2QvMw-S9fLFIhUMtb-TYwZXJL8q7_v) &#124; [log](logs/cascade_rcnn_detector/) |
 
 ### Training Speed
 
@@ -102,15 +109,16 @@ The training speed is measure with s/iter. The lower, the better.
 | Type         | mmdetection |
 |--------------|-------------|
 | Faster R-CNN |  0.216      |
-| Mask R-CNN   |  0.265      |
+| Cascade R-CNN   |  0.198      |
 | Retinanet    |  0.205      |
+
 
 ### Training memory
 
 | Type         | mmdetection |
 |--------------|-------------|
 | Faster R-CNN | 3.8         |
-| Mask R-CNN   | 3.9         |
+| Cascade R-CNN   | 4.3         |
 | Retinanet    | 3.4         |
 
 ## Extra: Generating stylized examples.
