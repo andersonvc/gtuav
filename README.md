@@ -120,7 +120,7 @@ python mmdetection/tools/get_flops.py <configfile.py>
 | :----: | :-------------: | :-----: | :-----: | :------: | :------------: | :----: | :------: | :--------: |
 | Faster-RCNN (CE)   | S-50-FPN   | pytorch	|   1x	  |   4.8    |   23	          | 24.3 |[config](configs/visdrone/) | [model](link) &#124; [log](link) |
 | Faster-RCNN (FOCAL)  | S-50-FPN   | pytorch	|   1x	  |   4.8  |   23	          | 22.5 |[config](configs/visdrone/faster_rcnn_r50_fpn_focal_l1loss_1x_coco.py) | [model](https://drive.google.com/drive/folders/1lmsgS1Z152tMRIHfEDG1cgkLxWKCa733?usp=sharing) &#124; [log](logs/faster_rcnn_r50_fpn_focal_l1loss_1x_coco/) |
-| Faster-RCNN   | S-101-FPN  | pytorch	|   1x	  |   8.1  |   18	          | 17.9 |[config](configs/visdrone/faster_rcnn_x101_64x4d_fpn_1x_coco.py) | [model](link) &#124; [log](logs/faster_rcnn_x101_64x4d_fpn_1x_coco/) |
+| ~~Faster-RCNN~~   | ~~S-101-FPN~~  | ~~pytorch~~	|   ~~1x~~	  |   ~~8.1~~  |   ~~18~~	          | ~~17.9~~ |[config](configs/visdrone/faster_rcnn_x101_64x4d_fpn_1x_coco.py) | [model](link) &#124; [log](logs/faster_rcnn_x101_64x4d_fpn_1x_coco/) |
 | Cascade RCNN  | S-50-FPN   | pytorch	|   1x	  |   4.8  |   13	          | 32.9 |[config](configs/visdrone/cascade_rcnn_r50_fpn_1x_coco.py) | [model](https://drive.google.com/open?id=1aacfxzj1FoRKBM8Fa-FFw4WCK64SfFp-) &#124; [log](logs/cascade_rcnn_r50_fpn_1x_coco/) |
 | DetectoRS     | S-50-FPN   | pytorch	|   1x	  |   4.1  |   11	          | 20.6 |[config](link) | [model](https://drive.google.com/open?id=1pC2QvMw-S9fLFIhUMtb-TYwZXJL8q7_v) &#124; [log](logs/cascade_rcnn_detector/) |
 
