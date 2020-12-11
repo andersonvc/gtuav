@@ -3,13 +3,13 @@
 | [Deep Learning Fall 2020 at Georgia Tech (Prof. Zsolt Kira)](https://github.com/pytorch/workshops/tree/master/CS7643)
 
 
-**Report**: We have released our technical report @ [link](report/report.pdf).
+**Report**: We have released our technical report [here](report/rgtax04882052020.pdf).
 
 ## Introduction
 
-Automatic understanding of visual data collected from overhead platforms such as Drones or general UAVs have been increasingly prevalent to a wide range of applications, including government agencies, agricultural services, aerial photography, surveillance systems & more. Computer vision has been attracting increasing amounts of attention in this space due to factors in computation and data availability. Notable contributions in this space developed benchmarks and challenges such as Caltech [[1]()], KITTI [[2]()], ImageNet [[3]()], and MS COCO [[4]()] for object detection. 
+Automatic understanding of visual data collected from overhead platforms such as Drones or general UAVs have been increasingly prevalent to a wide range of applications, including government agencies, agricultural services, aerial photography, surveillance systems & more. Computer vision has been attracting increasing amounts of attention in this space due to factors in computation and data availability. Notable contributions in this space developed benchmarks and challenges such as Caltech [[1]()], KITTI [[2]()], ImageNet [[3]()], and MS COCO [[4]()] for object detection.
 
-In conjunction with ECCV & ICCV participants, the VisDrone team has constructed experimental dataset of images use in challenges for (1) image object detection, (2) video object detection, (3) single object tracking, and (4) multi-object tracking. 
+In conjunction with ECCV & ICCV participants, the VisDrone team has constructed experimental dataset of images use in challenges for (1) image object detection, (2) video object detection, (3) single object tracking, and (4) multi-object tracking.
 
 This repository contains instructions on how to evaluate state-of-the-art modeling architectures with mmdetection framework and aerial imagery.
 
@@ -29,17 +29,17 @@ The VisDrone dataset is colleted by the AISKYEYE team at the Lab of Machine Lear
 In addition to the standard noramlized bbox annotations (i.e ``bbox_left/top/width/height``) visdrone also contains `truncation` and `occlusion` identifiers as described below.
 
         Name                                                  Description
-    -------------------------------------------------------------------------------------------------------------------------------     
+    -------------------------------------------------------------------------------------------------------------------------------
 
     <object_category> The object category indicates the type of annotated object, (i.e., ignored regions(0), pedestrian(1), people(2), bicycle(3), car(4), van(5), truck(6), tricycle(7), awning-tricycle(8), bus(9), motor(10), others(11))
-                          
+
     <truncation> The score in the DETECTION result file should be set to the constant -1.
-    The score in the GROUNDTRUTH file indicates the degree of object parts appears outside a frame 
+    The score in the GROUNDTRUTH file indicates the degree of object parts appears outside a frame
     (i.e., no truncation = 0 (truncation ratio 0%), and partial truncation = 1 (truncation ratio 1% ~ 50%)).
-                          
+
     <occlusion>	The score in the DETECTION file should be set to the constant -1. The score in the GROUNDTRUTH file indicates the fraction of objects being occluded (i.e., no occlusion = 0 (occlusion ratio 0%), partial occlusion = 1 (occlusion ratio 1% ~ 50%), and heavy occlusion = 2 (occlusion ratio 50% ~ 100%)).
    ------------------------------------------------------------------------------------------------------------------------------
-   
+
 
 ## Installation
 
@@ -88,7 +88,7 @@ python mmdetection/tools/train.py <configfile.py>
 ```
 
 #### Demo
- 
+
 To run inference on a video, you can use the following `video_demo.py` script as follows:
 
 ```
@@ -109,7 +109,7 @@ python mmdetection/tools/benchmark.py <configfile.py> <latest.pth>
 
 To evaluate model floating point operations and number of parameters:
 ```
-python mmdetection/tools/get_flops.py <configfile.py> 
+python mmdetection/tools/get_flops.py <configfile.py>
 ```
 
 ## Results
@@ -151,7 +151,7 @@ Use kaggle to download painters-by-numbers dataset directly at https://www.kaggl
 
 `kaggle datasets download mfekadu/painters-train-part-1/2/3`
 
-2) Download autoencoder networks and generate data. 
+2) Download autoencoder networks and generate data.
 
 ```
 git clone https://github.com/bethgelab/stylize-datasets
@@ -161,12 +161,12 @@ cd stylized-datasets
 then run the following command to generate your augmented dataset.
 
 ```
- python3 stylize.py 
-      --content-dir '/home/username/stylize-datasets/images/' 
-      --style-dir '/home/username/stylize-datasets/train/' 
-      --num-styles 10 
-      --alpha 0.5 
-      --content_size 0 
+ python3 stylize.py
+      --content-dir '/home/username/stylize-datasets/images/'
+      --style-dir '/home/username/stylize-datasets/train/'
+      --num-styles 10
+      --alpha 0.5
+      --content_size 0
       --style_size 256
  ```
 
