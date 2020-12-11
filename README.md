@@ -3,7 +3,7 @@
 | [Deep Learning Fall 2020 at Georgia Tech (Prof. Zsolt Kira)](https://github.com/pytorch/workshops/tree/master/CS7643)
 
 
-**Report**: We have released our technical report [here](report/rgtax04882052020.pdf).
+**Report**: We have released our technical report [here](report/gtax04882052020.pdf).
 
 ## Introduction
 
